@@ -403,6 +403,8 @@ tbody td{padding:10px 14px;font-size:0.8rem;vertical-align:middle}
 .td-desc span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.4}
 .badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:0.62rem;font-weight:700;white-space:nowrap}
 .b-tc{background:#dcfce7;color:#14532d}
+.b-conc{background:#052e16;color:#bbf7d0;font-weight:800;letter-spacing:0.04em}
+.b-hom{background:#cffafe;color:#164e63;border:1px solid #67e8f9}
 .b-et{background:#dbeafe;color:#1e3a8a}
 .b-ed{background:#fef9c3;color:#713f12}
 .b-ap{background:#ede9fe;color:#4c1d95}
@@ -619,7 +621,7 @@ tbody td{padding:10px 14px;font-size:0.8rem;vertical-align:middle}
 
  <div class="stats-row">
  <div class="stat-card blue"><div class="stat-lbl">Total de US</div><div class="stat-val" id="st-total">0</div></div>
- <div class="stat-card green"><div class="stat-lbl">Testes Concluídos</div><div class="stat-val" id="st-done">0</div></div>
+ <div class="stat-card green"><div class="stat-lbl">Concluídas</div><div class="stat-val" id="st-done">0</div></div>
  <div class="stat-card yellow"><div class="stat-lbl">Em Desenvolvimento</div><div class="stat-val" id="st-dev">0</div></div>
  <div class="stat-card purple"><div class="stat-lbl">A Planejar</div><div class="stat-val" id="st-plan">0</div></div>
  <div class="stat-card red"><div class="stat-lbl">Com Dependência</div><div class="stat-val" id="st-dep">0</div></div>
@@ -638,6 +640,7 @@ tbody td{padding:10px 14px;font-size:0.8rem;vertical-align:middle}
  </select>
  <select class="filter-sel" id="filterStatus" onchange="renderTable()">
  <option value="">Todos os status</option>
+ <option>CONCLUÍDO</option>
  <option>Testes concluídos</option>
  <option>Em testes</option>
  <option>Em homologação</option>
@@ -919,6 +922,7 @@ tbody td{padding:10px 14px;font-size:0.8rem;vertical-align:middle}
  <option>Em homologação</option>
  <option>Aguardando aprovação do cliente</option>
  <option>Aprovada pelo cliente</option>
+ <option>CONCLUÍDO</option>
  <option>Testes concluídos</option>
  </select>
  </div>
@@ -1040,7 +1044,7 @@ const DEFAULT_DATA = [
 {us:"NSAT-6519",d:"Seção - Acervo do Contribuinte no Controle de Intimação (PESSOAL)",dev:"Lucas Bonifácio",sp:"Sprint 21",st:"A apresentar e planejar",dep:"NSAT-6498"},
 {us:"NSAT-6520",d:"Seção - Acervo do Contribuinte no Controle de Intimação (AR)",dev:"Fabrício Souza",sp:"Sprint 21",st:"A apresentar e planejar",dep:"NSAT-6496"},
 {us:"NSAT-6521",d:"Seção - Acervo do Contribuinte no Controle de Intimação (EMAIL)",dev:"Lucas Bonifácio",sp:"Sprint 21",st:"A apresentar e planejar",dep:"NSAT-6497"},
-{us:"NSAT-6539",d:"Possibilidade de Remover Documentos Provenientes da Programação Fiscal no Segundo Envio do Termo Inicial",dev:"Andrei Falbot",sp:"Sprint 19",st:"Testes concluídos",dep:"Não há"},
+{us:"NSAT-6539",d:"Possibilidade de Remover Documentos Provenientes da Programação Fiscal no Segundo Envio do Termo Inicial",dev:"Andrei Falbot",sp:"Sprint 19",st:"CONCLUÍDO",dep:"Não há"},
 {us:"NSAT-6540",d:"Upload de Documentos Requeridos não Provenientes da Programação Fiscal (PORTAL DO CONTRIBUINTE)",dev:"Andrei Falbot",sp:"Sprint 20",st:"Testes concluídos",dep:"Não há"},
 {us:"NSAT-6541",d:"Parâmetro no tipo de atividade para acesso ao Painel de Análise e Instrução de Processo",dev:"Alexandre Xavier",sp:"Sprint 20",st:"Testes concluídos",dep:"Não há"},
 {us:"NSAT-6542",d:"Persistência da Análise e Instrução de Processo na tela de Fiscalização",dev:"Alexandre Xavier",sp:"Sprint 20",st:"Em desenvolvimento",dep:"NSAT-6541"},
@@ -1061,7 +1065,7 @@ const DEFAULT_DATA = [
 {us:"NSAT-6590",d:"Assinatura Digital - Representação Visual da Assinatura no PDF [RD]",dev:"Alexandre Xavier",sp:"Sprint 23",st:"A apresentar e planejar",dep:"NSAT-6544"},
 {us:"NSAT-6592",d:"Assinatura Digital - Representação Visual da Assinatura no PDF [TERMO DE INICIO]",dev:"Rafaela Piedade",sp:"Sprint 20",st:"Em desenvolvimento",dep:"Não há"},
 {us:"NSAT-6593",d:"Performance - Otimização de Carregamento do Painel de Fiscalizações e Emissão de Documento Fiscal",dev:"Andrei Falbot",sp:"Sprint 21",st:"A apresentar e planejar",dep:"Não há"},
-{us:"NSAT-6595",d:"Parâmetro Carregar Dem. de Calc. (AI/NFL)? na Pontuação do Processo",dev:"Andrei Falbot",sp:"Sprint 20",st:"Testes concluídos",dep:"Não há"},
+{us:"NSAT-6595",d:"Parâmetro Carregar Dem. de Calc. (AI/NFL)? na Pontuação do Processo",dev:"Andrei Falbot",sp:"Sprint 20",st:"Em homologação",dep:"Não há"},
 {us:"NSAT-6597",d:"Histórico de Envio - Requisição de Documento",dev:"Fabrício Souza",sp:"Sprint 21",st:"A apresentar e planejar",dep:"NSAT-6544"},
 {us:"NSAT-6598",d:"Controle de Envio - Composição e Configuração",dev:"Andrei Falbot",sp:"Sprint 20",st:"Em desenvolvimento",dep:"Não há"},
 {us:"NSAT-6599",d:"Controle de Envio - Propagação",dev:"Andrei Falbot",sp:"Sprint 20",st:"A apresentar e planejar",dep:"Não há"},
@@ -1144,7 +1148,7 @@ function navTo(page){
 
 // ===== TABLE =====
 function stBadge(s){
- const m={'Testes concluídos':'b-tc','Em testes':'b-et','Em homologação':'b-et','Em desenvolvimento':'b-ed','A apresentar e planejar':'b-ap','Apresentar e planejar':'b-ep','Aguardando aprovação do cliente':'b-ag','Aprovada pelo cliente':'b-ac'};
+ const m={'CONCLUÍDO':'b-conc','Testes concluídos':'b-tc','Em testes':'b-et','Em homologação':'b-hom','Em desenvolvimento':'b-ed','A apresentar e planejar':'b-ap','Apresentar e planejar':'b-ep','Aguardando aprovação do cliente':'b-ag','Aprovada pelo cliente':'b-ac'};
  return `<span class="badge ${m[s]||'b-ap'}">${s}</span>`;
 }
 function ini(n){return n.split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase()}
@@ -1175,7 +1179,7 @@ function renderTable(){
  });
  // stats
  document.getElementById('st-total').textContent=DATA.length;
- document.getElementById('st-done').textContent=DATA.filter(x=>x.st==='Testes concluídos').length;
+ document.getElementById('st-done').textContent=DATA.filter(x=>x.st==='CONCLUÍDO'||x.st==='Testes concluídos').length;
  document.getElementById('st-dev').textContent=DATA.filter(x=>x.st==='Em desenvolvimento').length;
  document.getElementById('st-plan').textContent=DATA.filter(x=>x.st.includes('planejar')).length;
  document.getElementById('st-dep').textContent=DATA.filter(x=>x.dep&&x.dep!=='Não há'&&x.dep!=='').length;
