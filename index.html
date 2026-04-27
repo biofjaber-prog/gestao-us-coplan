@@ -26,7 +26,7 @@
  --radius:10px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body{font-family:'DM Sans',sans-serif;background:#030812;color:var(--text);min-height:100vh}
 
 /* ===== LOGIN ===== */
 #loginScreen{
@@ -297,7 +297,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 @keyframes loBounce{0%,80%,100%{transform:scale(0.5);opacity:0.4}40%{transform:scale(1);opacity:1}}
 
 /* ===== APP ===== */
-#app{display:none}
+#app{display:none;background:var(--bg)}
 
 /* SIDEBAR */
 .layout{display:flex;min-height:100vh}
@@ -528,7 +528,7 @@ tbody td{padding:10px 14px;font-size:0.8rem;vertical-align:middle}
     </div>
     <div class="lb-heading">
      <h1>Gestão de<br><span>User Stories</span></h1>
-     <p>Módulo de Fiscalização — gerencie backlog, sprints e equipes com agilidade.</p>
+     <p style="font-size:1rem;font-weight:700;color:rgba(255,255,255,0.65);letter-spacing:0.04em;text-transform:uppercase;margin-top:4px">Módulo de Fiscalização</p>
     </div>
    </div>
    <div class="lb-stats">
@@ -541,7 +541,7 @@ tbody td{padding:10px 14px;font-size:0.8rem;vertical-align:middle}
    <div class="login-card-top">
     <div class="login-card-eyebrow">Acesso seguro</div>
     <h2>Bem-vindo de volta</h2>
-    <p>Entre com suas credenciais para continuar</p>
+    <p style="font-size:0.8rem;color:rgba(255,255,255,0.35);margin-top:6px;line-height:1.6"><span style="color:rgba(147,197,253,0.8);font-weight:600">Felipe Jaber</span> — entre com suas credenciais para acessar o sistema</p>
    </div>
    <div class="login-err" id="loginErr">Usuário ou senha inválidos</div>
    <div class="login-field">
