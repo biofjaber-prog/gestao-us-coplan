@@ -566,6 +566,7 @@ tbody td{padding:10px 14px;font-size:0.8rem;vertical-align:middle}
         <div class="gh-card">
           <h3>🚀 Publicar Alterações</h3>
           <p style="font-size:0.82rem;color:var(--muted);margin-bottom:16px;line-height:1.6">
+            Ao publicar, o sistema irá atualizar o <code style="background:#f1f5f9;padding:1px 5px;border-radius:4px;font-family:'DM Mono',monospace;font-size:0.75rem">const DATA=[...]</code> no seu arquivo HTML no GitHub. O GitHub Pages irá atualizar automaticamente em ~1 minuto.
           </p>
           <button class="btn btn-success" id="publishBtn" onclick="publishToGithub()">📡 Publicar no GitHub Pages</button>
           <div id="publishStatus" style="margin-top:12px;font-size:0.78rem;color:var(--muted)"></div>
@@ -1371,11 +1372,19 @@ async function publishToGithub(){
     if(!getR.ok) throw new Error('Arquivo não encontrado no repositório. Verifique o caminho.');
     const getD=await getR.json();
     const sha=getD.sha;
-    const currentContent=atob(getD.content.replace(/\n/g,''));
+    // Decode base64 preserving UTF-8 chars
+    const b64=getD.content.replace(/\n/g,'');
+    const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
+    const currentContent=new TextDecoder('utf-8').decode(bytes);
     // Replace DATA array in HTML
     const newDataStr='const DATA='+JSON.stringify(DATA)+';';
     const updated=currentContent.replace(/const DATA=\[[\s\S]*?\];/,newDataStr);
     if(updated===currentContent) throw new Error('Padrão "const DATA=[...];" não encontrado no HTML. Verifique se o arquivo é o correto.');
+    // Encode back to base64 preserving UTF-8
+    const encBytes=new TextEncoder().encode(updated);
+    let binary='';
+    encBytes.forEach(b=>binary+=String.fromCharCode(b));
+    const newContent=btoa(binary);
     // Push update
     status.textContent='Enviando alterações para o GitHub...';
     const putR=await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`,{
@@ -1383,7 +1392,7 @@ async function publishToGithub(){
       headers:{Authorization:`token ${token}`,'Content-Type':'application/json'},
       body:JSON.stringify({
         message:`[Gestão US] Atualização do backlog — ${new Date().toLocaleString('pt-BR')}`,
-        content:btoa(unescape(encodeURIComponent(updated))),
+        content:newContent,
         sha
       })
     });
