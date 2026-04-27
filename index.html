@@ -923,10 +923,25 @@ tbody td{padding:10px 14px;font-size:0.8rem;vertical-align:middle}
  </select>
  </div>
  </div>
- <div class="form-row one">
+<div class="form-row one">
  <div class="fld">
- <label>Dependência</label>
- <input type="text" id="fDep" placeholder="NSAT-0000 ou Não há">
+  <label>Possui dependência?</label>
+  <div style="display:flex;gap:0;border-radius:8px;overflow:hidden;border:1.5px solid var(--border);width:fit-content">
+   <button type="button" id="depNo" onclick="setDep(false)"
+    style="padding:9px 28px;font-size:0.82rem;font-weight:700;font-family:'DM Sans',sans-serif;border:none;cursor:pointer;transition:all 0.2s;background:#15803d;color:#fff">
+    Não
+   </button>
+   <button type="button" id="depYes" onclick="setDep(true)"
+    style="padding:9px 28px;font-size:0.82rem;font-weight:700;font-family:'DM Sans',sans-serif;border:none;cursor:pointer;transition:all 0.2s;background:#f1f5f9;color:#64748b">
+    Sim
+   </button>
+  </div>
+ </div>
+ </div>
+ <div class="form-row one" id="depUsRow" style="display:none;margin-top:-6px">
+ <div class="fld">
+  <label>Quais US's? <span style="font-weight:400;color:#94a3b8;text-transform:none;letter-spacing:0">(separe por / ex: NSAT-0001 / NSAT-0002)</span></label>
+  <input type="text" id="fDep" placeholder="ex: NSAT-6257 / NSAT-6290">
  </div>
  </div>
  </div>
@@ -1200,6 +1215,15 @@ function goPage(d){
 }
 
 // ===== MODAL =====
+function setDep(hasDep){
+ document.getElementById('depYes').style.background = hasDep ? '#1d4ed8' : '#f1f5f9';
+ document.getElementById('depYes').style.color = hasDep ? '#fff' : '#64748b';
+ document.getElementById('depNo').style.background = hasDep ? '#f1f5f9' : '#15803d';
+ document.getElementById('depNo').style.color = hasDep ? '#64748b' : '#fff';
+ document.getElementById('depUsRow').style.display = hasDep ? '' : 'none';
+ if(!hasDep) document.getElementById('fDep').value='';
+}
+
 function openModal(idx=null){
  editingIdx=idx;
  document.getElementById('modalTitle').textContent=idx===null?'Nova User Story':'Editar User Story';
@@ -1214,7 +1238,10 @@ function openModal(idx=null){
  fDev.value=x.dev||'';
  document.getElementById('fSprint').innerHTML='<option value="">Selecione</option>'+SPRINTS.map(s=>`<option ${s===(x.sp||'')?'selected':''}>${s}</option>`).join('');
  document.getElementById('fStatus').value=x.st||'A apresentar e planejar';
- document.getElementById('fDep').value=x.dep||'Não há';
+ const depVal = x.dep && x.dep !== 'Não há' ? x.dep : '';
+ const hasDep = depVal !== '';
+ setDep(hasDep);
+ document.getElementById('fDep').value = depVal;
  document.querySelector('#modalOverlay .modal-footer .btn-primary').textContent=idx===null?'+ Criar US':'Salvar alterações';
  document.getElementById('modalOverlay').classList.add('open');
 }
@@ -1230,7 +1257,10 @@ function saveUS(){
  const dev=document.getElementById('fDev').value;
  const sp=document.getElementById('fSprint').value;
  const st=document.getElementById('fStatus').value;
- const dep=document.getElementById('fDep').value.trim()||'Não há';
+ const depHas = document.getElementById('depYes').style.background.includes('1d4ed8') || document.getElementById('depYes').style.backgroundColor === 'rgb(29, 78, 216)';
+ const depRaw = document.getElementById('fDep').value.trim();
+ const dep = depHas && depRaw ? depRaw : 'Não há';
+ if(depHas && !depRaw){showToast('Informe as US\'s de dependência','error');return;}
  if(!us||!d||!dev||!sp){showToast('Preencha todos os campos obrigatórios','error');return;}
  if(editingIdx===null){
  if(DATA.find(x=>x.us===us)){showToast('Código de US já existe','error');return;}
