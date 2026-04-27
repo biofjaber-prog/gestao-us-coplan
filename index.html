@@ -965,7 +965,7 @@ function doLogin(){
  // Step 1: Carregando...
  setTimeout(()=>{
  document.getElementById('loText').classList.add('show');
- document.getElementById('loSub').classList.add('show');
+ // loSub hidden
  }, 100);
  // Step 2: Bem-vindo!
  setTimeout(()=>{
@@ -974,7 +974,7 @@ function doLogin(){
  document.getElementById('loText').style.display='none';
  document.getElementById('loSub').style.display='none';
  const welcome = document.getElementById('loWelcome');
- welcome.textContent = 'Bem-vindo, ' + found.name + '.';
+ welcome.textContent = 'Seja bem-vindo!';
  welcome.classList.add('show');
  }, 1400);
  // Step 3: Entrar no sistema
@@ -1619,7 +1619,7 @@ document.getElementById('devModalOverlay').addEventListener('click',e=>{if(e.tar
  <div class="lo-spinner" id="loSpinner"></div>
  <div>
  <div class="lo-text" id="loText">Carregando...</div>
- <div class="lo-sub" id="loSub">Módulo de Fiscalização</div>
+ <div class="lo-sub" id="loSub" style="display:none"></div>
  </div>
  <div class="lo-dots" id="loDots"><span></span><span></span><span></span></div>
  <div class="lo-welcome" id="loWelcome"></div>
