@@ -640,7 +640,7 @@ tbody td{padding:10px 14px;font-size:0.8rem;vertical-align:middle}
  </select>
  <select class="filter-sel" id="filterStatus" onchange="renderTable()">
  <option value="">Todos os status</option>
- <option>CONCLUÍDO</option>
+ <option>Concluído Homologação</option>
  <option>Testes concluídos</option>
  <option>Em testes</option>
  <option>Em homologação</option>
@@ -922,7 +922,7 @@ tbody td{padding:10px 14px;font-size:0.8rem;vertical-align:middle}
  <option>Em homologação</option>
  <option>Aguardando aprovação do cliente</option>
  <option>Aprovada pelo cliente</option>
- <option>CONCLUÍDO</option>
+ <option>Concluído Homologação</option>
  <option>Testes concluídos</option>
  </select>
  </div>
@@ -1044,7 +1044,7 @@ const DEFAULT_DATA = [
 {us:"NSAT-6519",d:"Seção - Acervo do Contribuinte no Controle de Intimação (PESSOAL)",dev:"Lucas Bonifácio",sp:"Sprint 21",st:"A apresentar e planejar",dep:"NSAT-6498"},
 {us:"NSAT-6520",d:"Seção - Acervo do Contribuinte no Controle de Intimação (AR)",dev:"Fabrício Souza",sp:"Sprint 21",st:"A apresentar e planejar",dep:"NSAT-6496"},
 {us:"NSAT-6521",d:"Seção - Acervo do Contribuinte no Controle de Intimação (EMAIL)",dev:"Lucas Bonifácio",sp:"Sprint 21",st:"A apresentar e planejar",dep:"NSAT-6497"},
-{us:"NSAT-6539",d:"Possibilidade de Remover Documentos Provenientes da Programação Fiscal no Segundo Envio do Termo Inicial",dev:"Andrei Falbot",sp:"Sprint 19",st:"CONCLUÍDO",dep:"Não há"},
+{us:"NSAT-6539",d:"Possibilidade de Remover Documentos Provenientes da Programação Fiscal no Segundo Envio do Termo Inicial",dev:"Andrei Falbot",sp:"Sprint 19",st:"Concluído Homologação",dep:"Não há"},
 {us:"NSAT-6540",d:"Upload de Documentos Requeridos não Provenientes da Programação Fiscal (PORTAL DO CONTRIBUINTE)",dev:"Andrei Falbot",sp:"Sprint 20",st:"Testes concluídos",dep:"Não há"},
 {us:"NSAT-6541",d:"Parâmetro no tipo de atividade para acesso ao Painel de Análise e Instrução de Processo",dev:"Alexandre Xavier",sp:"Sprint 20",st:"Testes concluídos",dep:"Não há"},
 {us:"NSAT-6542",d:"Persistência da Análise e Instrução de Processo na tela de Fiscalização",dev:"Alexandre Xavier",sp:"Sprint 20",st:"Em desenvolvimento",dep:"NSAT-6541"},
@@ -1148,7 +1148,7 @@ function navTo(page){
 
 // ===== TABLE =====
 function stBadge(s){
- const m={'CONCLUÍDO':'b-conc','Testes concluídos':'b-tc','Em testes':'b-et','Em homologação':'b-hom','Em desenvolvimento':'b-ed','A apresentar e planejar':'b-ap','Apresentar e planejar':'b-ep','Aguardando aprovação do cliente':'b-ag','Aprovada pelo cliente':'b-ac'};
+ const m={'Concluído Homologação':'b-conc','Testes concluídos':'b-tc','Em testes':'b-et','Em homologação':'b-hom','Em desenvolvimento':'b-ed','A apresentar e planejar':'b-ap','Apresentar e planejar':'b-ep','Aguardando aprovação do cliente':'b-ag','Aprovada pelo cliente':'b-ac'};
  return `<span class="badge ${m[s]||'b-ap'}">${s}</span>`;
 }
 function ini(n){return n.split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase()}
@@ -1179,7 +1179,7 @@ function renderTable(){
  });
  // stats
  document.getElementById('st-total').textContent=DATA.length;
- document.getElementById('st-done').textContent=DATA.filter(x=>x.st==='CONCLUÍDO'||x.st==='Testes concluídos').length;
+ document.getElementById('st-done').textContent=DATA.filter(x=>x.st==='Concluído Homologação'||x.st==='Testes concluídos').length;
  document.getElementById('st-dev').textContent=DATA.filter(x=>x.st==='Em desenvolvimento').length;
  document.getElementById('st-plan').textContent=DATA.filter(x=>x.st.includes('planejar')).length;
  document.getElementById('st-dep').textContent=DATA.filter(x=>x.dep&&x.dep!=='Não há'&&x.dep!=='').length;
@@ -1590,8 +1590,14 @@ async function publishToGithub(){
  const currentContent=new TextDecoder('utf-8').decode(bytes);
  // Replace DATA array in HTML
  const newDataStr='const DATA='+JSON.stringify(DATA)+';';
- const updated=currentContent.replace(/const DATA=\[[\s\S]*?\];/,newDataStr);
+ let updated=currentContent.replace(/const DATA=\[[\s\S]*?\];/,newDataStr);
  if(updated===currentContent) throw new Error('Padrão "const DATA=[...];" não encontrado no HTML. Verifique se o arquivo é o correto.');
+ // Replace publish date pill
+ const now=new Date();
+ const dateStr=now.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+ const timeStr=now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+ const newPill=`Atualizado em ${dateStr} ${timeStr}`;
+ updated=updated.replace(/(<div class="hdr-pill">)[^<]*(<\/div>)/,`$1${newPill}$2`);
  // Encode back to base64 preserving UTF-8
  const encBytes=new TextEncoder().encode(updated);
  let binary='';
