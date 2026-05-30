@@ -1588,11 +1588,12 @@ async function publishToGithub(){
  const b64=getD.content.replace(/\n/g,'');
  const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
  const currentContent=new TextDecoder('utf-8').decode(bytes);
- // Replace DATA array in HTML
- const newDataStr='const DATA='+JSON.stringify(DATA)+';';
- let updated=currentContent.replace(/const DATA=\[[\s\S]*?\];/,newDataStr);
- if(updated===currentContent) throw new Error('Padrão "const DATA=[...];" não encontrado no HTML. Verifique se o arquivo é o correto.');
- // Replace publish date pill
+// Replace DATA array in HTML
+const newDataStr='const DATA='+JSON.stringify(DATA)+';';
+const dataRegex=/const DATA=\[[\s\S]*?\];/;
+if(!dataRegex.test(currentContent)) throw new Error('Padrão "const DATA=[...];" não encontrado no HTML. Verifique se o arquivo é o correto.');
+let updated=currentContent.replace(dataRegex,()=>newDataStr);
+// Replace publish date pill
  const now=new Date();
  const dateStr=now.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
  const timeStr=now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
